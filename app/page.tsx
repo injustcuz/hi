@@ -1,15 +1,22 @@
 'use client';
 import { useEffect, useState } from 'react';
-import { extractYouTubeUrls } from '@/utils/extractYouTubeUrls';
+import { extractYouTubeUrls } from '../utils/extractYouTubeUrls';
+
+interface Video {
+  url: string;
+  embedUrl: string;
+  text: string;
+  author: string;
+}
 
 export default function Home() {
-  const [videos, setVideos] = useState([]);
+  const [videos, setVideos] = useState<Video[]>([]);
 
   useEffect(() => {
     async function fetchCasts() {
       const res = await fetch('/api/channel-casts');
       const data = await res.json();
-      const youtubeLinks = extractYouTubeUrls(data.casts);
+      const youtubeLinks = extractYouTubeUrls(data.casts) as Video[];
       setVideos(youtubeLinks);
     }
 
